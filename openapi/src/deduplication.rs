@@ -2,9 +2,10 @@ use indexmap::IndexMap;
 use indexmap::map::Entry;
 use tracing::debug;
 
+use crate::global_deduplication::PRELUDE_NAMES;
 use crate::rust_object::{ObjectKind, ObjectMetadata, ObjectUsage, RustObject};
 use crate::rust_type::{PathToType, RustType};
-use crate::stripe_object::StripeObject;
+use crate::stripe_object::{StripeObject, TypeAlias};
 use crate::types::{ComponentPath, RustIdent};
 use crate::visitor::{Visit, VisitMut};
 
@@ -45,11 +46,12 @@ pub struct DeduppedObject {
 struct DeduplicateObjects {
     objs: IndexMap<RustObject, DeduppedObjectInfo>,
     component_path: ComponentPath,
+    aliases: Vec<TypeAlias>,
 }
 
 impl DeduplicateObjects {
     pub fn new(path: ComponentPath) -> Self {
-        Self { objs: Default::default(), component_path: path }
+        Self { objs: Default::default(), component_path: path, aliases: vec![] }
     }
 }
 
@@ -58,16 +60,25 @@ impl VisitMut for DeduplicateObjects {
     where
         Self: Sized,
     {
-        if let Some((obj, _)) = typ.as_object_mut()
+        if let Some((obj, meta)) = typ.as_object_mut()
             && let Some(dedup_spec) = self.objs.get(obj)
         {
-            *typ = RustType::Path {
+            let target = RustType::Path {
                 path: PathToType::Deduplicated {
                     path: self.component_path.clone(),
                     ident: dedup_spec.ident.clone(),
                 },
                 is_ref: false,
+            };
+            if meta.ident != dedup_spec.ident {
+                self.aliases.push(TypeAlias {
+                    ident: meta.ident.clone(),
+                    target: target.clone(),
+                    doc: meta.doc.clone(),
+                    kind: usage.kind,
+                });
             }
+            *typ = target;
         }
         typ.visit_mut(self, usage);
     }
@@ -129,7 +140,7 @@ fn infer_dedupped_ident(objs: &[(ObjectMetadata, ObjectUsage)]) -> Option<RustId
     None
 }
 
-fn infer_dedupped_object_for(
+pub(crate) fn infer_dedupped_object_for(
     meta: &[(ObjectMetadata, ObjectUsage)],
     obj: &RustObject,
 ) -> Option<DeduppedObjectInfo> {
@@ -148,8 +159,11 @@ fn infer_dedupped_object_for(
 }
 
 #[tracing::instrument(level = "debug", skip(comp), fields(path = %comp.path()))]
-pub fn deduplicate_types(comp: &mut StripeObject) -> IndexMap<RustIdent, DeduppedObject> {
+pub fn deduplicate_types(
+    comp: &mut StripeObject,
+) -> (IndexMap<RustIdent, DeduppedObject>, Vec<TypeAlias>) {
     let mut objs = IndexMap::new();
+    let mut aliases = vec![];
     let comp_path = comp.path().clone();
 
     // We run deduplication passes until there are no further changes since one round
@@ -164,7 +178,9 @@ pub fn deduplicate_types(comp: &mut StripeObject) -> IndexMap<RustIdent, Deduppe
             if meta.len() < 2 {
                 continue;
             }
-            if let Some(inferred) = infer_dedupped_object_for(&meta, &obj) {
+            if let Some(inferred) = infer_dedupped_object_for(&meta, &obj)
+                && !PRELUDE_NAMES.contains(&inferred.ident.as_ref())
+            {
                 let ident = &inferred.ident;
                 // Don't add another deduplicated type with the same name as an existing one
                 if dedupper.objs.values().all(|o| &o.ident != ident) && !objs.contains_key(ident) {
@@ -178,6 +194,7 @@ pub fn deduplicate_types(comp: &mut StripeObject) -> IndexMap<RustIdent, Deduppe
         }
 
         comp.visit_mut(&mut dedupper);
+        aliases.append(&mut dedupper.aliases);
         for (obj, info) in dedupper.objs {
             let ident = info.ident.clone();
             if let Some(dup) = objs.insert(ident, DeduppedObject { info, object: obj }) {
@@ -188,5 +205,5 @@ pub fn deduplicate_types(comp: &mut StripeObject) -> IndexMap<RustIdent, Deduppe
     if !objs.is_empty() {
         debug!("Deduplicated {} types", objs.len());
     }
-    objs
+    (objs, aliases)
 }

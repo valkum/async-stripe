@@ -4,6 +4,7 @@ pub mod crate_inference;
 mod crate_table;
 pub mod crates;
 mod deduplication;
+mod global_deduplication;
 mod graph;
 mod object_writing;
 mod overrides;

@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use crate::components::Components;
 use crate::crates::Crate;
 use crate::deduplication::DeduppedObject;
-use crate::rust_object::{ObjectUsage, RustObject, StructField};
+use crate::rust_object::{ObjectKind, ObjectUsage, RustObject, StructField};
 use crate::rust_type::RustType;
 use crate::spec_inference::Inference;
 use crate::types::{ComponentPath, RustIdent};
@@ -52,6 +52,17 @@ pub struct StripeObject {
     pub krate: Option<CrateInfo>,
     pub stripe_doc_url: Option<String>,
     pub deduplicated_objects: IndexMap<RustIdent, DeduppedObject>,
+    /// Old names of inline types that deduplication replaced with another type
+    pub type_aliases: Vec<TypeAlias>,
+}
+
+/// `pub type {ident} = {target};`, written where `ident` used to be defined.
+#[derive(Debug, Clone)]
+pub struct TypeAlias {
+    pub ident: RustIdent,
+    pub target: RustType,
+    pub doc: Option<String>,
+    pub kind: ObjectKind,
 }
 
 impl StripeObject {

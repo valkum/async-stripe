@@ -9,6 +9,7 @@ use tracing::{debug, info};
 use crate::crate_inference::validate_crate_info;
 use crate::crates::{Crate, get_crate_for_package, maybe_use_hardcoded_crate_assignment};
 use crate::deduplication::{DeduppedObject, deduplicate_types};
+use crate::global_deduplication::deduplicate_across_components;
 use crate::overrides::Overrides;
 use crate::printable::{PrintableContainer, PrintableType};
 use crate::requests::parse_requests;
@@ -217,10 +218,11 @@ impl Components {
 
     fn run_deduplication_pass(&mut self) {
         for comp in self.components.values_mut() {
-            let extra_typs = deduplicate_types(comp);
+            let (extra_typs, aliases) = deduplicate_types(comp);
             for (ident, typ) in extra_typs {
                 comp.deduplicated_objects.insert(ident, typ);
             }
+            comp.type_aliases.extend(aliases);
         }
     }
 
@@ -325,6 +327,7 @@ pub fn get_components(
                 krate: inferred_crate,
                 stripe_doc_url: None,
                 deduplicated_objects: IndexMap::default(),
+                type_aliases: vec![],
             },
         );
     }
@@ -339,6 +342,7 @@ pub fn get_components(
     components.apply_overrides()?;
     debug!("Finished applying overrides");
 
+    deduplicate_across_components(&mut components);
     components.run_deduplication_pass();
     info!("Finished deduplication pass");
 

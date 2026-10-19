@@ -14,7 +14,7 @@ use crate::spec::Spec;
 use crate::spec_inference::infer_doc_comment;
 use crate::stripe_object::StripeObject;
 use crate::templates::cargo_toml::gen_crate_toml;
-use crate::templates::utils::write_top_level_doc_comment;
+use crate::templates::utils::{write_doc_comment, write_top_level_doc_comment};
 use crate::url_finder::UrlFinder;
 use crate::utils::{append_to_file, write_to_file};
 use crate::webhook::write_generated_for_webhooks;
@@ -65,7 +65,10 @@ impl CodeGen {
         let crate_mod_path = crate_path.join("mod.rs");
         for (ident, typ_info) in &self.components.extra_types {
             let mut out = String::new();
-            let metadata = ObjectMetadata::new(ident.clone());
+            let mut metadata = ObjectMetadata::new(ident.clone());
+            if let Some(doc) = typ_info.doc.as_ref().filter(|d| !d.is_empty()) {
+                metadata = metadata.doc(doc.clone());
+            }
             self.components.write_object(&typ_info.obj, &metadata, typ_info.usage, &mut out);
             write_to_file(out, crate_path.join(format!("{}.rs", typ_info.mod_path)))?;
             append_to_file(
@@ -204,6 +207,26 @@ impl CodeGen {
             let metadata = ObjectMetadata::new(ident.clone());
             self.components.write_object(&obj.object, &metadata, obj.info.usage, &mut out);
             let dst_file = match obj.info.usage.kind {
+                ObjectKind::RequestParam | ObjectKind::RequestReturned => {
+                    comp.get_requests_content_path()
+                }
+                ObjectKind::Type => comp.get_types_content_path(),
+            };
+            append_to_file(out, dst_file)?;
+        }
+
+        let mut written_aliases = std::collections::HashSet::new();
+        for alias in &comp.type_aliases {
+            if !written_aliases.insert((&alias.ident, alias.kind == ObjectKind::Type)) {
+                continue;
+            }
+            let mut out = String::new();
+            if let Some(doc) = &alias.doc {
+                out.push_str(&write_doc_comment(doc, 0));
+            }
+            let target = self.components.construct_printable_type(&alias.target);
+            let _ = writeln!(out, "pub type {} = {target};", alias.ident);
+            let dst_file = match alias.kind {
                 ObjectKind::RequestParam | ObjectKind::RequestReturned => {
                     comp.get_requests_content_path()
                 }
