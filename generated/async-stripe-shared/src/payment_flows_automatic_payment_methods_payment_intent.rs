@@ -19,7 +19,7 @@ impl std::fmt::Debug for PaymentFlowsAutomaticPaymentMethodsPaymentIntent {
 }
 #[doc(hidden)]
 pub struct PaymentFlowsAutomaticPaymentMethodsPaymentIntentBuilder {
-    allow_redirects: Option<Option<stripe_shared::MandatePixAmountIncludesIof>>,
+    allow_redirects: Option<stripe_shared::MandatePixAmountIncludesIof>,
     enabled: Option<bool>,
 }
 
@@ -63,19 +63,20 @@ const _: () = {
         type Out = PaymentFlowsAutomaticPaymentMethodsPaymentIntent;
         fn key(&mut self, k: &str) -> Result<&mut dyn Visitor> {
             Ok(match k {
-                "allow_redirects" => Deserialize::begin(&mut self.allow_redirects),
+                "allow_redirects" => {
+                    stripe_types::miniserde_helpers::begin_nullable(&mut self.allow_redirects)
+                }
                 "enabled" => Deserialize::begin(&mut self.enabled),
                 _ => <dyn Visitor>::ignore(),
             })
         }
 
         fn deser_default() -> Self {
-            Self { allow_redirects: Some(None), enabled: None }
+            Self { allow_redirects: None, enabled: None }
         }
 
         fn take_out(&mut self) -> Option<Self::Out> {
-            let (Some(allow_redirects), Some(enabled)) =
-                (self.allow_redirects.take(), self.enabled)
+            let (allow_redirects, Some(enabled)) = (self.allow_redirects.take(), self.enabled)
             else {
                 return None;
             };

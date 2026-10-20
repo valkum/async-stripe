@@ -22,8 +22,8 @@ impl std::fmt::Debug for PaymentPagesCheckoutSessionSavedPaymentMethodOptions {
 #[doc(hidden)]
 pub struct PaymentPagesCheckoutSessionSavedPaymentMethodOptionsBuilder {
     allow_redisplay_filters: Option<Option<Vec<stripe_shared::CardAllowRedisplay>>>,
-    payment_method_remove: Option<Option<stripe_shared::BalanceSettingsResourcePayoutsStatus>>,
-    payment_method_save: Option<Option<stripe_shared::BalanceSettingsResourcePayoutsStatus>>,
+    payment_method_remove: Option<stripe_shared::BalanceSettingsResourcePayoutsStatus>,
+    payment_method_save: Option<stripe_shared::BalanceSettingsResourcePayoutsStatus>,
 }
 
 #[allow(
@@ -68,8 +68,12 @@ const _: () = {
         fn key(&mut self, k: &str) -> Result<&mut dyn Visitor> {
             Ok(match k {
                 "allow_redisplay_filters" => Deserialize::begin(&mut self.allow_redisplay_filters),
-                "payment_method_remove" => Deserialize::begin(&mut self.payment_method_remove),
-                "payment_method_save" => Deserialize::begin(&mut self.payment_method_save),
+                "payment_method_remove" => {
+                    stripe_types::miniserde_helpers::begin_nullable(&mut self.payment_method_remove)
+                }
+                "payment_method_save" => {
+                    stripe_types::miniserde_helpers::begin_nullable(&mut self.payment_method_save)
+                }
                 _ => <dyn Visitor>::ignore(),
             })
         }
@@ -77,22 +81,17 @@ const _: () = {
         fn deser_default() -> Self {
             Self {
                 allow_redisplay_filters: Some(None),
-                payment_method_remove: Some(None),
-                payment_method_save: Some(None),
+                payment_method_remove: None,
+                payment_method_save: None,
             }
         }
 
         fn take_out(&mut self) -> Option<Self::Out> {
-            let (
-                Some(allow_redisplay_filters),
-                Some(payment_method_remove),
-                Some(payment_method_save),
-            ) = (
+            let (Some(allow_redisplay_filters), payment_method_remove, payment_method_save) = (
                 self.allow_redisplay_filters.take(),
                 self.payment_method_remove.take(),
                 self.payment_method_save.take(),
-            )
-            else {
+            ) else {
                 return None;
             };
             Some(Self::Out { allow_redisplay_filters, payment_method_remove, payment_method_save })

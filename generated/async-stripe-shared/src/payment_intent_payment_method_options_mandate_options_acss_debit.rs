@@ -24,8 +24,8 @@ impl std::fmt::Debug for PaymentIntentPaymentMethodOptionsMandateOptionsAcssDebi
 pub struct PaymentIntentPaymentMethodOptionsMandateOptionsAcssDebitBuilder {
     custom_mandate_url: Option<Option<String>>,
     interval_description: Option<Option<String>>,
-    payment_schedule: Option<Option<stripe_shared::PaymentSchedule>>,
-    transaction_type: Option<Option<stripe_shared::TransactionType>>,
+    payment_schedule: Option<stripe_shared::PaymentSchedule>,
+    transaction_type: Option<stripe_shared::TransactionType>,
 }
 
 #[allow(
@@ -71,8 +71,12 @@ const _: () = {
             Ok(match k {
                 "custom_mandate_url" => Deserialize::begin(&mut self.custom_mandate_url),
                 "interval_description" => Deserialize::begin(&mut self.interval_description),
-                "payment_schedule" => Deserialize::begin(&mut self.payment_schedule),
-                "transaction_type" => Deserialize::begin(&mut self.transaction_type),
+                "payment_schedule" => {
+                    stripe_types::miniserde_helpers::begin_nullable(&mut self.payment_schedule)
+                }
+                "transaction_type" => {
+                    stripe_types::miniserde_helpers::begin_nullable(&mut self.transaction_type)
+                }
                 _ => <dyn Visitor>::ignore(),
             })
         }
@@ -81,8 +85,8 @@ const _: () = {
             Self {
                 custom_mandate_url: Some(None),
                 interval_description: Some(None),
-                payment_schedule: Some(None),
-                transaction_type: Some(None),
+                payment_schedule: None,
+                transaction_type: None,
             }
         }
 
@@ -90,8 +94,8 @@ const _: () = {
             let (
                 Some(custom_mandate_url),
                 Some(interval_description),
-                Some(payment_schedule),
-                Some(transaction_type),
+                payment_schedule,
+                transaction_type,
             ) = (
                 self.custom_mandate_url.take(),
                 self.interval_description.take(),

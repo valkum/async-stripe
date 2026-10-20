@@ -19,7 +19,7 @@ impl std::fmt::Debug for TreasuryFinancialAccountsResourceFinancialAddress {
 }
 #[doc(hidden)]
 pub struct TreasuryFinancialAccountsResourceFinancialAddressBuilder {
-    aba: Option<Option<stripe_treasury::TreasuryFinancialAccountsResourceAbaRecord>>,
+    aba: Option<stripe_treasury::TreasuryFinancialAccountsResourceAbaRecord>,
     supported_networks: Option<Option<Vec<stripe_shared::UsBankAccountNetworksSupported>>>,
     type_: Option<TreasuryFinancialAccountsResourceFinancialAddressType>,
 }
@@ -64,7 +64,7 @@ const _: () = {
         type Out = TreasuryFinancialAccountsResourceFinancialAddress;
         fn key(&mut self, k: &str) -> Result<&mut dyn Visitor> {
             Ok(match k {
-                "aba" => Deserialize::begin(&mut self.aba),
+                "aba" => stripe_types::miniserde_helpers::begin_nullable(&mut self.aba),
                 "supported_networks" => Deserialize::begin(&mut self.supported_networks),
                 "type" => Deserialize::begin(&mut self.type_),
                 _ => <dyn Visitor>::ignore(),
@@ -72,11 +72,11 @@ const _: () = {
         }
 
         fn deser_default() -> Self {
-            Self { aba: Some(None), supported_networks: Some(None), type_: None }
+            Self { aba: None, supported_networks: Some(None), type_: None }
         }
 
         fn take_out(&mut self) -> Option<Self::Out> {
-            let (Some(aba), Some(supported_networks), Some(type_)) =
+            let (aba, Some(supported_networks), Some(type_)) =
                 (self.aba.take(), self.supported_networks.take(), self.type_.take())
             else {
                 return None;

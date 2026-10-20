@@ -20,12 +20,10 @@ impl std::fmt::Debug for TreasuryFinancialAccountsResourcePlatformRestrictions {
 }
 #[doc(hidden)]
 pub struct TreasuryFinancialAccountsResourcePlatformRestrictionsBuilder {
-    inbound_flows: Option<
+    inbound_flows:
         Option<stripe_shared::CreateTreasuryFinancialAccountPlatformRestrictionsInboundFlows>,
-    >,
-    outbound_flows: Option<
+    outbound_flows:
         Option<stripe_shared::CreateTreasuryFinancialAccountPlatformRestrictionsInboundFlows>,
-    >,
 }
 
 #[allow(
@@ -69,18 +67,22 @@ const _: () = {
         type Out = TreasuryFinancialAccountsResourcePlatformRestrictions;
         fn key(&mut self, k: &str) -> Result<&mut dyn Visitor> {
             Ok(match k {
-                "inbound_flows" => Deserialize::begin(&mut self.inbound_flows),
-                "outbound_flows" => Deserialize::begin(&mut self.outbound_flows),
+                "inbound_flows" => {
+                    stripe_types::miniserde_helpers::begin_nullable(&mut self.inbound_flows)
+                }
+                "outbound_flows" => {
+                    stripe_types::miniserde_helpers::begin_nullable(&mut self.outbound_flows)
+                }
                 _ => <dyn Visitor>::ignore(),
             })
         }
 
         fn deser_default() -> Self {
-            Self { inbound_flows: Some(None), outbound_flows: Some(None) }
+            Self { inbound_flows: None, outbound_flows: None }
         }
 
         fn take_out(&mut self) -> Option<Self::Out> {
-            let (Some(inbound_flows), Some(outbound_flows)) =
+            let (inbound_flows, outbound_flows) =
                 (self.inbound_flows.take(), self.outbound_flows.take())
             else {
                 return None;

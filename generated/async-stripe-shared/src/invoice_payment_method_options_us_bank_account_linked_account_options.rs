@@ -19,9 +19,8 @@ impl std::fmt::Debug for InvoicePaymentMethodOptionsUsBankAccountLinkedAccountOp
 }
 #[doc(hidden)]
 pub struct InvoicePaymentMethodOptionsUsBankAccountLinkedAccountOptionsBuilder {
-    filters: Option<
+    filters:
         Option<stripe_shared::InvoicePaymentMethodOptionsUsBankAccountLinkedAccountOptionsFilters>,
-    >,
     permissions: Option<Option<Vec<stripe_shared::Permissions>>>,
     prefetch: Option<Option<Vec<stripe_shared::Prefetch>>>,
 }
@@ -66,7 +65,7 @@ const _: () = {
         type Out = InvoicePaymentMethodOptionsUsBankAccountLinkedAccountOptions;
         fn key(&mut self, k: &str) -> Result<&mut dyn Visitor> {
             Ok(match k {
-                "filters" => Deserialize::begin(&mut self.filters),
+                "filters" => stripe_types::miniserde_helpers::begin_nullable(&mut self.filters),
                 "permissions" => Deserialize::begin(&mut self.permissions),
                 "prefetch" => Deserialize::begin(&mut self.prefetch),
                 _ => <dyn Visitor>::ignore(),
@@ -74,11 +73,11 @@ const _: () = {
         }
 
         fn deser_default() -> Self {
-            Self { filters: Some(None), permissions: Some(None), prefetch: Some(None) }
+            Self { filters: None, permissions: Some(None), prefetch: Some(None) }
         }
 
         fn take_out(&mut self) -> Option<Self::Out> {
-            let (Some(filters), Some(permissions), Some(prefetch)) =
+            let (filters, Some(permissions), Some(prefetch)) =
                 (self.filters.take(), self.permissions.take(), self.prefetch.take())
             else {
                 return None;

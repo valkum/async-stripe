@@ -14,7 +14,7 @@ impl std::fmt::Debug for PaymentMethodOptionsCardPresentRouting {
 }
 #[doc(hidden)]
 pub struct PaymentMethodOptionsCardPresentRoutingBuilder {
-    requested_priority: Option<Option<stripe_shared::RequestedPriority>>,
+    requested_priority: Option<stripe_shared::RequestedPriority>,
 }
 
 #[allow(
@@ -57,17 +57,19 @@ const _: () = {
         type Out = PaymentMethodOptionsCardPresentRouting;
         fn key(&mut self, k: &str) -> Result<&mut dyn Visitor> {
             Ok(match k {
-                "requested_priority" => Deserialize::begin(&mut self.requested_priority),
+                "requested_priority" => {
+                    stripe_types::miniserde_helpers::begin_nullable(&mut self.requested_priority)
+                }
                 _ => <dyn Visitor>::ignore(),
             })
         }
 
         fn deser_default() -> Self {
-            Self { requested_priority: Some(None) }
+            Self { requested_priority: None }
         }
 
         fn take_out(&mut self) -> Option<Self::Out> {
-            let (Some(requested_priority),) = (self.requested_priority.take(),) else {
+            let (requested_priority,) = (self.requested_priority.take(),) else {
                 return None;
             };
             Some(Self::Out { requested_priority })
