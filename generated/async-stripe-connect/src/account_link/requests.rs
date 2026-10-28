@@ -98,10 +98,9 @@ impl std::str::FromStr for CreateAccountLinkCollectionOptionsFutureRequirements 
             "include" => Ok(Include),
             "omit" => Ok(Omit),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
+                stripe_types::warn_unknown_enum_value(
                     v,
-                    "CreateAccountLinkCollectionOptionsFutureRequirements"
+                    "CreateAccountLinkCollectionOptionsFutureRequirements",
                 );
                 Ok(Unknown(v.to_owned()))
             }
@@ -140,7 +139,8 @@ impl<'de> serde::Deserialize<'de> for CreateAccountLinkCollectionOptionsFutureRe
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// The type of account link the user is requesting.
@@ -176,7 +176,7 @@ impl std::str::FromStr for CreateAccountLinkType {
             "account_onboarding" => Ok(AccountOnboarding),
             "account_update" => Ok(AccountUpdate),
             v => {
-                tracing::warn!("Unknown value '{}' for enum '{}'", v, "CreateAccountLinkType");
+                stripe_types::warn_unknown_enum_value(v, "CreateAccountLinkType");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -213,7 +213,8 @@ impl<'de> serde::Deserialize<'de> for CreateAccountLinkType {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Creates an AccountLink object that includes a single-use Stripe URL that the platform can redirect their user to in order to take them through the Connect Onboarding flow.

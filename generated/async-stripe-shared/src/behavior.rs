@@ -29,7 +29,7 @@ impl std::str::FromStr for Behavior {
             "mark_uncollectible" => Ok(MarkUncollectible),
             "void" => Ok(Void),
             v => {
-                tracing::warn!("Unknown value '{}' for enum '{}'", v, "Behavior");
+                stripe_types::warn_unknown_enum_value(v, "Behavior");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -70,17 +70,25 @@ impl miniserde::Deserialize for Behavior {
 impl miniserde::de::Visitor for crate::Place<Behavior> {
     fn string(&mut self, s: &str) -> miniserde::Result<()> {
         use std::str::FromStr;
-        self.out = Some(Behavior::from_str(s).expect("infallible"));
+        self.out = {
+            let Ok(v) = Behavior::from_str(s);
+            Some(v)
+        };
         Ok(())
     }
 }
 
-stripe_types::impl_from_val_with_from_str!(Behavior);
+impl stripe_types::miniserde_helpers::FromValueOpt for Behavior {
+    fn from_value(v: miniserde::json::Value) -> Option<Self> {
+        stripe_types::miniserde_helpers::from_value_via_deserialize(v)
+    }
+}
 #[cfg(feature = "deserialize")]
 impl<'de> serde::Deserialize<'de> for Behavior {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }

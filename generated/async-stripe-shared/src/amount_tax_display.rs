@@ -29,7 +29,7 @@ impl std::str::FromStr for AmountTaxDisplay {
             "exclude_tax" => Ok(ExcludeTax),
             "include_inclusive_tax" => Ok(IncludeInclusiveTax),
             v => {
-                tracing::warn!("Unknown value '{}' for enum '{}'", v, "AmountTaxDisplay");
+                stripe_types::warn_unknown_enum_value(v, "AmountTaxDisplay");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -66,6 +66,7 @@ impl<'de> serde::Deserialize<'de> for AmountTaxDisplay {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }

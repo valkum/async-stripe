@@ -377,11 +377,7 @@ impl std::str::FromStr for IssuingCardCancellationReason {
             "lost" => Ok(Lost),
             "stolen" => Ok(Stolen),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "IssuingCardCancellationReason"
-                );
+                stripe_types::warn_unknown_enum_value(v, "IssuingCardCancellationReason");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -423,18 +419,26 @@ impl miniserde::Deserialize for IssuingCardCancellationReason {
 impl miniserde::de::Visitor for crate::Place<IssuingCardCancellationReason> {
     fn string(&mut self, s: &str) -> miniserde::Result<()> {
         use std::str::FromStr;
-        self.out = Some(IssuingCardCancellationReason::from_str(s).expect("infallible"));
+        self.out = {
+            let Ok(v) = IssuingCardCancellationReason::from_str(s);
+            Some(v)
+        };
         Ok(())
     }
 }
 
-stripe_types::impl_from_val_with_from_str!(IssuingCardCancellationReason);
+impl stripe_types::miniserde_helpers::FromValueOpt for IssuingCardCancellationReason {
+    fn from_value(v: miniserde::json::Value) -> Option<Self> {
+        stripe_types::miniserde_helpers::from_value_via_deserialize(v)
+    }
+}
 #[cfg(feature = "deserialize")]
 impl<'de> serde::Deserialize<'de> for IssuingCardCancellationReason {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// The reason why the previous card needed to be replaced.
@@ -474,11 +478,7 @@ impl std::str::FromStr for IssuingCardReplacementReason {
             "lost" => Ok(Lost),
             "stolen" => Ok(Stolen),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "IssuingCardReplacementReason"
-                );
+                stripe_types::warn_unknown_enum_value(v, "IssuingCardReplacementReason");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -520,18 +520,26 @@ impl miniserde::Deserialize for IssuingCardReplacementReason {
 impl miniserde::de::Visitor for crate::Place<IssuingCardReplacementReason> {
     fn string(&mut self, s: &str) -> miniserde::Result<()> {
         use std::str::FromStr;
-        self.out = Some(IssuingCardReplacementReason::from_str(s).expect("infallible"));
+        self.out = {
+            let Ok(v) = IssuingCardReplacementReason::from_str(s);
+            Some(v)
+        };
         Ok(())
     }
 }
 
-stripe_types::impl_from_val_with_from_str!(IssuingCardReplacementReason);
+impl stripe_types::miniserde_helpers::FromValueOpt for IssuingCardReplacementReason {
+    fn from_value(v: miniserde::json::Value) -> Option<Self> {
+        stripe_types::miniserde_helpers::from_value_via_deserialize(v)
+    }
+}
 #[cfg(feature = "deserialize")]
 impl<'de> serde::Deserialize<'de> for IssuingCardReplacementReason {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 impl stripe_types::Object for IssuingCard {

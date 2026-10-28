@@ -371,7 +371,7 @@ impl std::str::FromStr for CreateTaxIdType {
             "zm_tin" => Ok(ZmTin),
             "zw_tin" => Ok(ZwTin),
             v => {
-                tracing::warn!("Unknown value '{}' for enum '{}'", v, "CreateTaxIdType");
+                stripe_types::warn_unknown_enum_value(v, "CreateTaxIdType");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -408,6 +408,7 @@ impl<'de> serde::Deserialize<'de> for CreateTaxIdType {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }

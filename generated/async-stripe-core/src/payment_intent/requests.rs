@@ -8809,11 +8809,7 @@ impl std::str::FromStr for CancelPaymentIntentCancellationReason {
             "fraudulent" => Ok(Fraudulent),
             "requested_by_customer" => Ok(RequestedByCustomer),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "CancelPaymentIntentCancellationReason"
-                );
+                stripe_types::warn_unknown_enum_value(v, "CancelPaymentIntentCancellationReason");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -8850,7 +8846,8 @@ impl<'de> serde::Deserialize<'de> for CancelPaymentIntentCancellationReason {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// You can cancel a PaymentIntent object when it’s in one of these statuses: `requires_payment_method`, `requires_capture`, `requires_confirmation`, `requires_action` or, [in rare cases](https://stripe.com/docs/payments/intents), `processing`.

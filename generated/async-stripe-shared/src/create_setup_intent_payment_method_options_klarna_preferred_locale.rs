@@ -158,10 +158,9 @@ impl std::str::FromStr for CreateSetupIntentPaymentMethodOptionsKlarnaPreferredL
             "sv-FI" => Ok(SvMinusFi),
             "sv-SE" => Ok(SvMinusSe),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
+                stripe_types::warn_unknown_enum_value(
                     v,
-                    "CreateSetupIntentPaymentMethodOptionsKlarnaPreferredLocale"
+                    "CreateSetupIntentPaymentMethodOptionsKlarnaPreferredLocale",
                 );
                 Ok(Unknown(v.to_owned()))
             }
@@ -200,6 +199,7 @@ impl<'de> serde::Deserialize<'de> for CreateSetupIntentPaymentMethodOptionsKlarn
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }

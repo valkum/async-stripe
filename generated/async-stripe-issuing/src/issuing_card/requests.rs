@@ -389,11 +389,7 @@ impl std::str::FromStr for CreateIssuingCardReplacementReason {
             "lost" => Ok(Lost),
             "stolen" => Ok(Stolen),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "CreateIssuingCardReplacementReason"
-                );
+                stripe_types::warn_unknown_enum_value(v, "CreateIssuingCardReplacementReason");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -430,7 +426,8 @@ impl<'de> serde::Deserialize<'de> for CreateIssuingCardReplacementReason {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Creates an Issuing `Card` object.
@@ -644,11 +641,7 @@ impl std::str::FromStr for UpdateIssuingCardCancellationReason {
             "lost" => Ok(Lost),
             "stolen" => Ok(Stolen),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "UpdateIssuingCardCancellationReason"
-                );
+                stripe_types::warn_unknown_enum_value(v, "UpdateIssuingCardCancellationReason");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -685,7 +678,8 @@ impl<'de> serde::Deserialize<'de> for UpdateIssuingCardCancellationReason {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Updates the specified Issuing `Card` object by setting the values of the parameters passed.

@@ -915,7 +915,7 @@ impl std::str::FromStr for EnabledEvents {
             "treasury.received_credit.succeeded" => Ok(TreasuryReceivedCreditSucceeded),
             "treasury.received_debit.created" => Ok(TreasuryReceivedDebitCreated),
             v => {
-                tracing::warn!("Unknown value '{}' for enum '{}'", v, "EnabledEvents");
+                stripe_types::warn_unknown_enum_value(v, "EnabledEvents");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -952,6 +952,7 @@ impl<'de> serde::Deserialize<'de> for EnabledEvents {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }

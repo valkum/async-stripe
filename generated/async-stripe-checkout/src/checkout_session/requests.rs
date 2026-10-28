@@ -826,10 +826,9 @@ impl std::str::FromStr for CreateCheckoutSessionBrandingSettingsFontFamily {
             "ubuntu_mono" => Ok(UbuntuMono),
             "zen_maru_gothic" => Ok(ZenMaruGothic),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
+                stripe_types::warn_unknown_enum_value(
                     v,
-                    "CreateCheckoutSessionBrandingSettingsFontFamily"
+                    "CreateCheckoutSessionBrandingSettingsFontFamily",
                 );
                 Ok(Unknown(v.to_owned()))
             }
@@ -868,7 +867,8 @@ impl<'de> serde::Deserialize<'de> for CreateCheckoutSessionBrandingSettingsFontF
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// The icon for the Checkout Session. For best results, use a square image.
@@ -4333,11 +4333,7 @@ impl std::str::FromStr for CreateCheckoutSessionPaymentMethodTypes {
             "wechat_pay" => Ok(WechatPay),
             "zip" => Ok(Zip),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "CreateCheckoutSessionPaymentMethodTypes"
-                );
+                stripe_types::warn_unknown_enum_value(v, "CreateCheckoutSessionPaymentMethodTypes");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -4374,7 +4370,8 @@ impl<'de> serde::Deserialize<'de> for CreateCheckoutSessionPaymentMethodTypes {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// This property is used to set up permissions for various actions (e.g., update) on the CheckoutSession object.
@@ -4822,10 +4819,9 @@ impl std::str::FromStr for CreateCheckoutSessionSubscriptionDataProrationBehavio
             "create_prorations" => Ok(CreateProrations),
             "none" => Ok(None),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
+                stripe_types::warn_unknown_enum_value(
                     v,
-                    "CreateCheckoutSessionSubscriptionDataProrationBehavior"
+                    "CreateCheckoutSessionSubscriptionDataProrationBehavior",
                 );
                 Ok(Unknown(v.to_owned()))
             }
@@ -4864,7 +4860,8 @@ impl<'de> serde::Deserialize<'de> for CreateCheckoutSessionSubscriptionDataProra
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// If specified, the funds from the subscription's invoices will be transferred to the destination and the ID of the resulting transfers will be found on the resulting charges.

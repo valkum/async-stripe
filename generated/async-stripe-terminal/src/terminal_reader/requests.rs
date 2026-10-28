@@ -2016,11 +2016,7 @@ impl std::str::FromStr for PresentPaymentMethodTerminalReaderType {
             "card_present" => Ok(CardPresent),
             "interac_present" => Ok(InteracPresent),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "PresentPaymentMethodTerminalReaderType"
-                );
+                stripe_types::warn_unknown_enum_value(v, "PresentPaymentMethodTerminalReaderType");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -2057,7 +2053,8 @@ impl<'de> serde::Deserialize<'de> for PresentPaymentMethodTerminalReaderType {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Presents a payment method on a simulated reader.
@@ -2195,10 +2192,9 @@ impl std::str::FromStr for SucceedInputCollectionTerminalReaderSkipNonRequiredIn
             "all" => Ok(All),
             "none" => Ok(None),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
+                stripe_types::warn_unknown_enum_value(
                     v,
-                    "SucceedInputCollectionTerminalReaderSkipNonRequiredInputs"
+                    "SucceedInputCollectionTerminalReaderSkipNonRequiredInputs",
                 );
                 Ok(Unknown(v.to_owned()))
             }
@@ -2237,7 +2233,8 @@ impl<'de> serde::Deserialize<'de> for SucceedInputCollectionTerminalReaderSkipNo
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Use this endpoint to trigger a successful input collection on a simulated reader.

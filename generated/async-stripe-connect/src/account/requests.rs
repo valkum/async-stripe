@@ -3884,7 +3884,7 @@ impl std::str::FromStr for CreateAccountType {
             "express" => Ok(Express),
             "standard" => Ok(Standard),
             v => {
-                tracing::warn!("Unknown value '{}' for enum '{}'", v, "CreateAccountType");
+                stripe_types::warn_unknown_enum_value(v, "CreateAccountType");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -3921,7 +3921,8 @@ impl<'de> serde::Deserialize<'de> for CreateAccountType {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// With [Connect](https://stripe.com/docs/connect), you can create Stripe accounts for your users.
@@ -7529,7 +7530,7 @@ impl std::str::FromStr for RejectAccountPayoutsAction {
             "none" => Ok(None),
             "pause" => Ok(Pause),
             v => {
-                tracing::warn!("Unknown value '{}' for enum '{}'", v, "RejectAccountPayoutsAction");
+                stripe_types::warn_unknown_enum_value(v, "RejectAccountPayoutsAction");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -7566,7 +7567,8 @@ impl<'de> serde::Deserialize<'de> for RejectAccountPayoutsAction {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// With <a href="/connect">Connect</a>, you can reject accounts that you have flagged as suspicious.

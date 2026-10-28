@@ -619,11 +619,7 @@ impl std::str::FromStr for PaymentIntentCancellationReason {
             "requested_by_customer" => Ok(RequestedByCustomer),
             "void_invoice" => Ok(VoidInvoice),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "PaymentIntentCancellationReason"
-                );
+                stripe_types::warn_unknown_enum_value(v, "PaymentIntentCancellationReason");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -665,18 +661,26 @@ impl miniserde::Deserialize for PaymentIntentCancellationReason {
 impl miniserde::de::Visitor for crate::Place<PaymentIntentCancellationReason> {
     fn string(&mut self, s: &str) -> miniserde::Result<()> {
         use std::str::FromStr;
-        self.out = Some(PaymentIntentCancellationReason::from_str(s).expect("infallible"));
+        self.out = {
+            let Ok(v) = PaymentIntentCancellationReason::from_str(s);
+            Some(v)
+        };
         Ok(())
     }
 }
 
-stripe_types::impl_from_val_with_from_str!(PaymentIntentCancellationReason);
+impl stripe_types::miniserde_helpers::FromValueOpt for PaymentIntentCancellationReason {
+    fn from_value(v: miniserde::json::Value) -> Option<Self> {
+        stripe_types::miniserde_helpers::from_value_via_deserialize(v)
+    }
+}
 #[cfg(feature = "deserialize")]
 impl<'de> serde::Deserialize<'de> for PaymentIntentCancellationReason {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Status of this PaymentIntent, one of `requires_payment_method`, `requires_confirmation`, `requires_action`, `processing`, `requires_capture`, `canceled`, or `succeeded`.
@@ -723,7 +727,7 @@ impl std::str::FromStr for PaymentIntentStatus {
             "requires_payment_method" => Ok(RequiresPaymentMethod),
             "succeeded" => Ok(Succeeded),
             v => {
-                tracing::warn!("Unknown value '{}' for enum '{}'", v, "PaymentIntentStatus");
+                stripe_types::warn_unknown_enum_value(v, "PaymentIntentStatus");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -765,18 +769,26 @@ impl miniserde::Deserialize for PaymentIntentStatus {
 impl miniserde::de::Visitor for crate::Place<PaymentIntentStatus> {
     fn string(&mut self, s: &str) -> miniserde::Result<()> {
         use std::str::FromStr;
-        self.out = Some(PaymentIntentStatus::from_str(s).expect("infallible"));
+        self.out = {
+            let Ok(v) = PaymentIntentStatus::from_str(s);
+            Some(v)
+        };
         Ok(())
     }
 }
 
-stripe_types::impl_from_val_with_from_str!(PaymentIntentStatus);
+impl stripe_types::miniserde_helpers::FromValueOpt for PaymentIntentStatus {
+    fn from_value(v: miniserde::json::Value) -> Option<Self> {
+        stripe_types::miniserde_helpers::from_value_via_deserialize(v)
+    }
+}
 #[cfg(feature = "deserialize")]
 impl<'de> serde::Deserialize<'de> for PaymentIntentStatus {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 impl stripe_types::Object for PaymentIntent {

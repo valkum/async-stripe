@@ -485,10 +485,9 @@ impl std::str::FromStr for RefreshFinancialConnectionsAccountFeatures {
             "ownership" => Ok(Ownership),
             "transactions" => Ok(Transactions),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
+                stripe_types::warn_unknown_enum_value(
                     v,
-                    "RefreshFinancialConnectionsAccountFeatures"
+                    "RefreshFinancialConnectionsAccountFeatures",
                 );
                 Ok(Unknown(v.to_owned()))
             }
@@ -527,7 +526,8 @@ impl<'de> serde::Deserialize<'de> for RefreshFinancialConnectionsAccountFeatures
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Refreshes the data associated with a Financial Connections `Account`.

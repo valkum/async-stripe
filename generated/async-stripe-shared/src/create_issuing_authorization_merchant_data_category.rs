@@ -995,10 +995,9 @@ impl std::str::FromStr for CreateIssuingAuthorizationMerchantDataCategory {
             "womens_ready_to_wear_stores" => Ok(WomensReadyToWearStores),
             "wrecking_and_salvage_yards" => Ok(WreckingAndSalvageYards),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
+                stripe_types::warn_unknown_enum_value(
                     v,
-                    "CreateIssuingAuthorizationMerchantDataCategory"
+                    "CreateIssuingAuthorizationMerchantDataCategory",
                 );
                 Ok(Unknown(v.to_owned()))
             }
@@ -1037,6 +1036,7 @@ impl<'de> serde::Deserialize<'de> for CreateIssuingAuthorizationMerchantDataCate
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }

@@ -284,7 +284,7 @@ impl std::str::FromStr for CreateRefundOrigin {
         match s {
             "customer_balance" => Ok(CustomerBalance),
             v => {
-                tracing::warn!("Unknown value '{}' for enum '{}'", v, "CreateRefundOrigin");
+                stripe_types::warn_unknown_enum_value(v, "CreateRefundOrigin");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -321,7 +321,8 @@ impl<'de> serde::Deserialize<'de> for CreateRefundOrigin {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// When you create a new refund, you must specify a Charge or a PaymentIntent object on which to create it.

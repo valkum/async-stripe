@@ -301,7 +301,7 @@ impl std::str::FromStr for ListSubscriptionStatus {
             "trialing" => Ok(Trialing),
             "unpaid" => Ok(Unpaid),
             v => {
-                tracing::warn!("Unknown value '{}' for enum '{}'", v, "ListSubscriptionStatus");
+                stripe_types::warn_unknown_enum_value(v, "ListSubscriptionStatus");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -338,7 +338,8 @@ impl<'de> serde::Deserialize<'de> for ListSubscriptionStatus {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// By default, returns a list of subscriptions that have not been canceled.
@@ -1841,11 +1842,7 @@ impl std::str::FromStr for MigrateSubscriptionBillingModeType {
         match s {
             "flexible" => Ok(Flexible),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "MigrateSubscriptionBillingModeType"
-                );
+                stripe_types::warn_unknown_enum_value(v, "MigrateSubscriptionBillingModeType");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -1882,7 +1879,8 @@ impl<'de> serde::Deserialize<'de> for MigrateSubscriptionBillingModeType {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Upgrade the billing_mode of an existing subscription.

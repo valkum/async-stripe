@@ -31,11 +31,7 @@ impl std::str::FromStr for CreateSourceSourceOrderItemsType {
             "sku" => Ok(Sku),
             "tax" => Ok(Tax),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "CreateSourceSourceOrderItemsType"
-                );
+                stripe_types::warn_unknown_enum_value(v, "CreateSourceSourceOrderItemsType");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -72,6 +68,7 @@ impl<'de> serde::Deserialize<'de> for CreateSourceSourceOrderItemsType {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }

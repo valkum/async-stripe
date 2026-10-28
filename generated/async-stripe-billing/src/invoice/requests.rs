@@ -635,11 +635,7 @@ impl std::str::FromStr for CreateInvoiceFromInvoiceAction {
         match s {
             "revision" => Ok(Revision),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "CreateInvoiceFromInvoiceAction"
-                );
+                stripe_types::warn_unknown_enum_value(v, "CreateInvoiceFromInvoiceAction");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -676,7 +672,8 @@ impl<'de> serde::Deserialize<'de> for CreateInvoiceFromInvoiceAction {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// The connected account that issues the invoice.
@@ -1070,10 +1067,9 @@ impl std::str::FromStr for CreateInvoicePendingInvoiceItemsBehavior {
             "exclude" => Ok(Exclude),
             "include" => Ok(Include),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
+                stripe_types::warn_unknown_enum_value(
                     v,
-                    "CreateInvoicePendingInvoiceItemsBehavior"
+                    "CreateInvoicePendingInvoiceItemsBehavior",
                 );
                 Ok(Unknown(v.to_owned()))
             }
@@ -1111,7 +1107,8 @@ impl<'de> serde::Deserialize<'de> for CreateInvoicePendingInvoiceItemsBehavior {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// This endpoint creates a draft invoice for a given customer.
@@ -2832,11 +2829,7 @@ impl std::str::FromStr for RemoveLinesInvoiceLinesBehavior {
             "delete" => Ok(Delete),
             "unassign" => Ok(Unassign),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "RemoveLinesInvoiceLinesBehavior"
-                );
+                stripe_types::warn_unknown_enum_value(v, "RemoveLinesInvoiceLinesBehavior");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -2873,7 +2866,8 @@ impl<'de> serde::Deserialize<'de> for RemoveLinesInvoiceLinesBehavior {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Removes multiple line items from an invoice.
@@ -3844,11 +3838,7 @@ impl std::str::FromStr for CreatePreviewInvoicePreviewMode {
             "next" => Ok(Next),
             "recurring" => Ok(Recurring),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "CreatePreviewInvoicePreviewMode"
-                );
+                stripe_types::warn_unknown_enum_value(v, "CreatePreviewInvoicePreviewMode");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -3885,7 +3875,8 @@ impl<'de> serde::Deserialize<'de> for CreatePreviewInvoicePreviewMode {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// The schedule creation or modification params to apply as a preview.
@@ -3959,10 +3950,9 @@ impl std::str::FromStr for CreatePreviewInvoiceScheduleDetailsEndBehavior {
             "cancel" => Ok(Cancel),
             "release" => Ok(Release),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
+                stripe_types::warn_unknown_enum_value(
                     v,
-                    "CreatePreviewInvoiceScheduleDetailsEndBehavior"
+                    "CreatePreviewInvoiceScheduleDetailsEndBehavior",
                 );
                 Ok(Unknown(v.to_owned()))
             }
@@ -4001,7 +3991,8 @@ impl<'de> serde::Deserialize<'de> for CreatePreviewInvoiceScheduleDetailsEndBeha
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// List representing phases of the subscription schedule.
@@ -5107,10 +5098,9 @@ impl std::str::FromStr for CreatePreviewInvoiceSubscriptionDetailsResumeAt {
         match s {
             "now" => Ok(Now),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
+                stripe_types::warn_unknown_enum_value(
                     v,
-                    "CreatePreviewInvoiceSubscriptionDetailsResumeAt"
+                    "CreatePreviewInvoiceSubscriptionDetailsResumeAt",
                 );
                 Ok(Unknown(v.to_owned()))
             }
@@ -5149,7 +5139,8 @@ impl<'de> serde::Deserialize<'de> for CreatePreviewInvoiceSubscriptionDetailsRes
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// If provided, the invoice returned will preview updating or creating a subscription with that trial end.

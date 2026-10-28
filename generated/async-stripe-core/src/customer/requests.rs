@@ -978,11 +978,7 @@ impl std::str::FromStr for CreateCustomerTaxValidateLocation {
             "deferred" => Ok(Deferred),
             "immediately" => Ok(Immediately),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "CreateCustomerTaxValidateLocation"
-                );
+                stripe_types::warn_unknown_enum_value(v, "CreateCustomerTaxValidateLocation");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -1019,7 +1015,8 @@ impl<'de> serde::Deserialize<'de> for CreateCustomerTaxValidateLocation {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// The customer's tax IDs.
@@ -1358,11 +1355,7 @@ impl std::str::FromStr for UpdateCustomerTaxValidateLocation {
             "deferred" => Ok(Deferred),
             "immediately" => Ok(Immediately),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
-                    v,
-                    "UpdateCustomerTaxValidateLocation"
-                );
+                stripe_types::warn_unknown_enum_value(v, "UpdateCustomerTaxValidateLocation");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -1399,7 +1392,8 @@ impl<'de> serde::Deserialize<'de> for UpdateCustomerTaxValidateLocation {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Updates the specified customer by setting the values of the parameters passed.
@@ -1694,10 +1688,9 @@ impl std::str::FromStr for CreateFundingInstructionsCustomerBankTransferRequeste
             "spei" => Ok(Spei),
             "zengin" => Ok(Zengin),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
+                stripe_types::warn_unknown_enum_value(
                     v,
-                    "CreateFundingInstructionsCustomerBankTransferRequestedAddressTypes"
+                    "CreateFundingInstructionsCustomerBankTransferRequestedAddressTypes",
                 );
                 Ok(Unknown(v.to_owned()))
             }
@@ -1740,7 +1733,8 @@ impl<'de> serde::Deserialize<'de>
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Retrieve funding instructions for a customer cash balance.

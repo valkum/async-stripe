@@ -448,7 +448,7 @@ impl std::str::FromStr for CreateSourceFlow {
             "receiver" => Ok(Receiver),
             "redirect" => Ok(Redirect),
             v => {
-                tracing::warn!("Unknown value '{}' for enum '{}'", v, "CreateSourceFlow");
+                stripe_types::warn_unknown_enum_value(v, "CreateSourceFlow");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -485,7 +485,8 @@ impl<'de> serde::Deserialize<'de> for CreateSourceFlow {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Optional parameters for the receiver flow.
@@ -549,10 +550,9 @@ impl std::str::FromStr for CreateSourceReceiverRefundAttributesMethod {
             "manual" => Ok(Manual),
             "none" => Ok(None),
             v => {
-                tracing::warn!(
-                    "Unknown value '{}' for enum '{}'",
+                stripe_types::warn_unknown_enum_value(
                     v,
-                    "CreateSourceReceiverRefundAttributesMethod"
+                    "CreateSourceReceiverRefundAttributesMethod",
                 );
                 Ok(Unknown(v.to_owned()))
             }
@@ -591,7 +591,8 @@ impl<'de> serde::Deserialize<'de> for CreateSourceReceiverRefundAttributesMethod
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Parameters required for the redirect flow.
@@ -672,7 +673,7 @@ impl std::str::FromStr for CreateSourceUsage {
             "reusable" => Ok(Reusable),
             "single_use" => Ok(SingleUse),
             v => {
-                tracing::warn!("Unknown value '{}' for enum '{}'", v, "CreateSourceUsage");
+                stripe_types::warn_unknown_enum_value(v, "CreateSourceUsage");
                 Ok(Unknown(v.to_owned()))
             }
         }
@@ -709,7 +710,8 @@ impl<'de> serde::Deserialize<'de> for CreateSourceUsage {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         use std::str::FromStr;
         let s: std::borrow::Cow<'de, str> = serde::Deserialize::deserialize(deserializer)?;
-        Ok(Self::from_str(&s).expect("infallible"))
+        let Ok(v) = Self::from_str(&s);
+        Ok(v)
     }
 }
 /// Creates a new source object.
